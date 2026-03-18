@@ -1,0 +1,31 @@
+﻿@model Expense
+
+@{ ViewData["Title"] = "Delete Permanently";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Permanent Deletion</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <strong>Warning!</strong> This action cannot be undone. This record will be wiped from the database.
+            </div>
+            
+            <dl class="row">
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+                <dt class="col-sm-3">Total Amount</dt>
+                <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Delete Permanently</button>
+                <a asp-action="ArchivedExpenses" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+﻿@model Executive_Fuentes.Models.UserViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0" style="border-radius:15px;">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Edit User</h4>
+        </div>
+
+        <div class="card-body p-4">
+            <form asp-action="Edit" asp-route-id="@ViewBag.UserId" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Full Name</label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input asp-for="Username" class="form-control" readonly />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Role</label>
+                    <select asp-for="Role" class="form-select">
+                        <option value="SuperAdmin">Super Admin</option>
+                        <option value="Executive">Executive</option>
+                        <option value="HeadManager">Head Manager</option>
+                        <option value="AuthorizedUser">Authorized User</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="List" class="btn btn-outline-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-dark px-4">Update User</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

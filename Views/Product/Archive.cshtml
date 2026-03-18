@@ -1,0 +1,89 @@
+﻿@model Product
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Confirm Archive";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <div class="text-center mb-4">
+                <div class="display-4 text-warning mb-2">
+                    <i class="fas fa-box-archive"></i>
+                </div>
+                <h2 class="fw-bold text-dark">Archive Product?</h2>
+                <p class="text-muted">Moving this item to archives will hide it from the active storefront and sales reports.</p>
+            </div>
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="bg-warning" style="height: 6px;"></div>
+
+                <div class="card-body p-4">
+                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Item Details</h6>
+
+                    <div class="bg-light rounded-3 p-3 mb-4 border">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small">Name:</span>
+                            <span class="fw-bold text-dark text-end">@Model.ProductName</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small">Category:</span>
+                            <span class="badge bg-white text-secondary border px-2 py-1">@Model.Category</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">Current Price:</span>
+                            <span class="fw-bold text-success">₱ @Model.Price.ToString("N2")</span>
+                        </div>
+                    </div>
+
+                    <form asp-action="Archive" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning py-2 fw-bold text-dark shadow-sm">
+                                <i class="fas fa-archive me-2"></i>Confirm Archive
+                            </button>
+                            <a asp-action="Index" class="btn btn-link text-decoration-none text-muted py-2">
+                                No, keep it active
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    You can restore this product at any time from the <strong>Archived View</strong>.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        transition: transform 0.2s ease;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background-color: #ffca2c;
+            transform: translateY(-1px);
+        }
+
+    .bg-light {
+        background-color: #fcfcfc !important;
+    }
+</style>

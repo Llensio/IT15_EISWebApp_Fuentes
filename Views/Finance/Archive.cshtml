@@ -1,0 +1,34 @@
+﻿@model Expense
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Archive Expense";
+}
+
+<div class="container mt-4">
+    <div class="card border-warning">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Archive Confirmation</h4>
+        </div>
+        <div class="card-body">
+            <p class="lead">Are you sure you want to move this expense to the archive?</p>
+            <p class="text-muted">It will no longer appear in active financial reports, but can be restored later.</p>
+
+            <dl class="row mt-4">
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Amount</dt>
+                <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+                <dt class="col-sm-3">Date</dt>
+                <dd class="col-sm-9">@Model.ExpenseDate.ToShortDateString()</dd>
+            </dl>
+
+            <form asp-action="Archive">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-warning">Archive Record</button>
+                <a asp-action="Expenses" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

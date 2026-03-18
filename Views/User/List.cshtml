@@ -1,0 +1,59 @@
+﻿@using Executive_Fuentes.Data
+@model IEnumerable<ApplicationUser>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold h2 mb-1">User Management</h1>
+            <p class="text-muted">Manage system access and account statuses</p>
+        </div>
+        <a asp-action="Index" class="btn btn-dark px-4 shadow-sm" style="border-radius: 10px;">
+            <i class="bi bi-plus-lg me-2"></i> Add New User
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="table-responsive p-4">
+            <table class="table align-middle">
+                <thead class="text-muted small text-uppercase">
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td><strong>@user.FullName</strong></td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <span class="badge @(user.Status == "Active" ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger") px-3 py-2">
+                                    @user.Status
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <form asp-action="ToggleStatus" asp-route-id="@user.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm @(user.Status == "Active" ? "btn-outline-danger" : "btn-outline-primary") ms-1">
+                                            @(user.Status == "Active" ? "Archive" : "Activate")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

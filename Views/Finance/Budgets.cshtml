@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Budget>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Budget Management";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Budget Management</h3>
+        <a asp-action="CreateBudget" class="btn btn-success rounded-3 shadow-sm">
+            + New Budget
+        </a>
+    </div>
+
+    <div class="card shadow rounded-4 border-0">
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Amount</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var budget in Model)
+                    {
+                        <tr>
+                            <td>₱ @budget.Amount.ToString("N2")</td>
+                            <td>@budget.StartDate.ToString("MMM dd, yyyy")</td>
+                            <td>@budget.EndDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                @if (budget.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+                            <td class="text-center">
+
+                                <a asp-action="EditBudget"
+                                   asp-route-id="@budget.Id"
+                                   class="btn btn-sm btn-warning me-1">
+                                    Edit
+                                </a>
+
+                                @if (!budget.IsActive)
+                                {
+                                    <a asp-action="ActivateBudget"
+                                       asp-route-id="@budget.Id"
+                                       class="btn btn-sm btn-success"
+                                       onclick="return confirm('Activate this budget? It will deactivate the current active budget.');">
+                                        Activate
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Expense>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Archived Expenses";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Archived Expenses</h3>
+        <a asp-action="Expenses" class="btn btn-primary rounded-3 shadow-sm">
+            Back to Active Expenses
+        </a>
+    </div>
+
+    <div class="card shadow rounded-4 border-0">
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                No archived expenses.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var expense in Model)
+                        {
+                            <tr>
+                                <td>@expense.Description</td>
+                                <td>₱ @expense.Amount.ToString("N2")</td>
+                                <td>@expense.ExpenseDate.ToString("MMM dd, yyyy")</td>
+                                <td class="text-center">
+
+                                    <a asp-action="Restore"
+                                       asp-route-id="@expense.Id"
+                                       class="btn btn-sm btn-success me-1"
+                                       onclick="return confirm('Restore this expense?');">
+                                        Restore
+                                    </a>
+
+                                    <a asp-action="DeletePermanent"
+                                       asp-route-id="@expense.Id"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Permanently delete this expense?');">
+                                        Delete
+                                    </a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

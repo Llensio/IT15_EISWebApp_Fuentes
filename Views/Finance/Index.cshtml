@@ -1,0 +1,169 @@
+﻿@model FinanceSummary
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Finance Dashboard";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid py-4">
+
+    <!-- ================= HEADER ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Finance Dashboard</h2>
+            <p class="text-muted mb-0">Revenue • Expenses • Budget Control • Forecast Analytics</p>
+        </div>
+
+        <div>
+            <a asp-action="Expenses" class="btn btn-danger me-2 shadow-sm rounded-3">
+                Manage Expenses
+            </a>
+
+            <a asp-action="Budgets" class="btn btn-warning shadow-sm rounded-3">
+                Manage Budgets
+            </a>
+        </div>
+    </div>
+
+    <!-- ================= KPI CARDS ================= -->
+    <div class="row g-4 mb-4">
+
+        <!-- Revenue -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 bg-success text-white h-100">
+                <div class="card-body">
+                    <h6 class="opacity-75">Total Revenue</h6>
+                    <h3 class="fw-bold">₱ @Model.TotalRevenue.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 bg-danger text-white h-100">
+                <div class="card-body">
+                    <h6 class="opacity-75">Total Expenses</h6>
+                    <h3 class="fw-bold">₱ @Model.TotalExpenses.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit / Loss -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 @(Model.NetProfit >= 0 ? "bg-primary" : "bg-dark") text-white h-100">
+                <div class="card-body">
+                    <h6 class="opacity-75">Net Profit / Loss</h6>
+                    <h3 class="fw-bold">₱ @Model.NetProfit.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Budget -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 bg-warning text-dark h-100">
+                <div class="card-body">
+                    <h6 class="opacity-75">Active Budget</h6>
+                    <h3 class="fw-bold">₱ @Model.BudgetAmount.ToString("N2")</h3>
+                    <small>Remaining: ₱ @Model.BudgetRemaining.ToString("N2")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= BUDGET UTILIZATION ================= -->
+    @{
+        var percentageUsed = Model.BudgetAmount > 0
+        ? (Model.TotalExpenses / Model.BudgetAmount) * 100
+        : 0;
+
+        var progressColor = percentageUsed >= 100 ? "bg-danger"
+        : percentageUsed >= 80 ? "bg-warning"
+        : "bg-success";
+    }
+
+    <div class="card shadow border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h6 class="fw-bold mb-3">Budget Utilization</h6>
+
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar @progressColor"
+                     role="progressbar"
+                     style="width: @percentageUsed%;"
+                     aria-valuenow="@percentageUsed"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    @percentageUsed.ToString("N1")%
+                </div>
+            </div>
+
+            @if (percentageUsed >= 100)
+            {
+                <div class="alert alert-danger mt-3 rounded-3">
+                    ⚠ Budget Exceeded! Immediate financial review required.
+                </div>
+            }
+            else if (percentageUsed >= 80)
+            {
+                <div class="alert alert-warning mt-3 rounded-3">
+                    ⚠ Warning: Budget usage has reached 80%.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- ================= CHART SECTION ================= -->
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-light fw-bold">
+            Financial Overview (Actual vs Forecast)
+        </div>
+        <div class="card-body">
+            <canvas id="financeChart" height="110"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var ctx = document.getElementById('financeChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Revenue', 'Expenses'],
+            datasets: [
+                {
+                    label: 'Actual',
+                    data: [
+                        @Model.TotalRevenue,
+                        @Model.TotalExpenses
+                    ],
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderRadius: 8
+                },
+                {
+                    label: 'Forecast',
+                    data: [
+                        @Model.ForecastRevenue,
+                        @Model.ForecastExpenses
+                    ],
+                    backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,130 @@
+﻿@model List<Executive_Fuentes.Models.AuditLog>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Audit Logs";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container-fluid py-4 px-4">
+
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-1"><i class="fas fa-shield-halved me-2 text-primary"></i>System Audit Logs</h2>
+            <p class="text-muted small mb-0">Monitor system changes and user activity for security compliance.</p>
+        </div>
+        @* <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <button class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-filter me-2"></i>Filter</button>
+            <button class="btn btn-outline-primary btn-sm"><i class="fas fa-download me-2"></i>Export CSV</button>
+        </div> *@
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 border-0 text-muted small text-uppercase fw-bold py-3">Timestamp</th>
+                            <th class="border-0 text-muted small text-uppercase fw-bold py-3">User Details</th>
+                            <th class="border-0 text-muted small text-uppercase fw-bold py-3">Module</th>
+                            <th class="border-0 text-muted small text-uppercase fw-bold py-3 text-center">Action</th>
+                            <th class="border-0 text-muted small text-uppercase fw-bold py-3">Activity Description</th>
+                            @* <th class="border-0 text-muted small text-uppercase fw-bold py-3">IP Address</th> *@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    @{
+                                        var philippineTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+                                        var phTime = TimeZoneInfo.ConvertTimeFromUtc(log.DateTime, philippineTimeZone);
+                                    }
+
+                                    <div class="fw-semibold text-dark">@phTime.ToString("MMM dd, yyyy")</div>
+                                    <div class="text-muted x-small">@phTime.ToString("hh:mm:ss tt")</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-2 bg-primary-subtle text-primary fw-bold">
+                                            @log.UserName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark small">@log.UserName</div>
+                                            <span class="badge bg-light text-secondary border x-small">@log.Role</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-dark fw-medium small">@log.Module</span>
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        var badgeClass = log.Action.ToLower() switch
+                                        {
+                                            "create" or "add" => "bg-success-subtle text-success border-success-subtle",
+                                            "update" or "edit" => "bg-warning-subtle text-warning border-warning-subtle",
+                                            "delete" or "remove" => "bg-danger-subtle text-danger border-danger-subtle",
+                                            _ => "bg-info-subtle text-info border-info-subtle"
+                                        };
+                                    }
+                                    <span class="badge rounded-pill @badgeClass border px-3">
+                                        @log.Action
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="text-dark small lh-sm" style="max-width: 300px;">
+                                        @log.Description
+                                    </div>
+                                </td>
+                                @* <td>
+                                    <code class="text-muted small">@log.IPAddress</code>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-0 py-3">
+            <nav class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">Showing <strong>@Model.Count</strong> log entries</small>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .table thead th {
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+
+    .x-small {
+        font-size: 0.7rem;
+    }
+
+    .avatar-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+    /* Action Badge Colors */
+    .bg-success-subtle {
+        background-color: #e1f7ec !important;
+        color: #0f5132 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+        color: #856404 !important;

@@ -1,0 +1,110 @@
+﻿@model Executive_Fuentes.Models.UserViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create User";
+}
+
+<div class="container-fluid px-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold h2 mb-1">Create New User</h1>
+            <p class="text-muted">Register a new administrator for the EF System</p>
+        </div>
+        <div>
+            <a asp-action="List" class="btn btn-light border shadow-sm px-4">List User</a>
+        </div>
+    </div>
+
+    <form asp-action="CreateUser" method="post">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 15px;">
+                    <h5 class="fw-bold mb-4">Profile Details</h5>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Full Name</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-person"></i></span>
+                                <input asp-for="FullName" class="form-control border-0 bg-transparent py-2" placeholder="Enter name" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Email Address</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" class="form-control border-0 bg-transparent py-2" placeholder="email@ef.com" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Username</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-at"></i></span>
+                                <input asp-for="Username" class="form-control border-0 bg-transparent py-2" placeholder="username" />
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Temporary Password</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-key"></i></span>
+                                <input asp-for="Password" type="password" class="form-control border-0 bg-transparent py-2" placeholder="••••••••" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 15px;">
+                    <h5 class="fw-bold mb-4">Access Control</h5>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-uppercase text-muted">System Role</label>
+                        <select asp-for="Role" class="form-select border rounded-3 bg-light py-2">
+                            <option value="Executive">Executive</option>
+                            <option value="HeadManager">Head Manager</option>
+                            <option value="AuthorizedUser">Authorized User</option>
+                            <option value="SuperAdmin">Super Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Account Status</label>
+                        <select asp-for="Status" class="form-select border rounded-3 bg-light py-2">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-auto">
+                        <button type="submit" class="btn btn-dark w-100 py-3 fw-bold shadow" style="background-color: #0f172a; border-radius: 10px;">
+                            <i class="bi bi-person-plus-fill me-2"></i> Confirm Creation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Subtle polish to match your screenshot exactly */
+    .form-control:focus, .form-select:focus {
+        box-shadow: none;
+        background-color: #fff !important;
+        border-color: #38bdf8 !important;
+    }
+
+    .input-group:focus-within {
+        background-color: #fff !important;
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    }
+
+    .card {
+        transition: transform 0.2s ease;
+    }
+</style>

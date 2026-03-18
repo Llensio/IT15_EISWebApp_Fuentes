@@ -1,0 +1,191 @@
+﻿@model StrategicReportVM
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Strategic Reports";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container-fluid py-4 bg-light min-vh-100">
+
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark mb-1">Strategic Sales & Product Report</h2>
+        <p class="text-secondary small">Executive-level performance and growth analysis</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-semibold mb-2">Total Revenue</div>
+                    <h3 class="fw-bold text-success mb-0">₱ @Model.TotalRevenue.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-semibold mb-2">Total Quantity Sold</div>
+                    <h3 class="fw-bold text-dark mb-0">@Model.TotalQuantitySold</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-semibold mb-2">Active Products</div>
+                    <h3 class="fw-bold text-primary mb-0">@Model.TotalProducts</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-semibold mb-2">Archived Products</div>
+                    <h3 class="fw-bold text-danger mb-0">@Model.ArchivedProducts</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Monthly Analysis *@
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-body d-flex align-items-center justify-content-between py-4">
+            <div>
+                <h6 class="fw-bold text-muted text-uppercase small mb-2">Monthly Growth Analysis</h6>
+                @if (Model.GrowthRate >= 0)
+                {
+                    <h2 class="text-success fw-bold mb-0">
+                        <i class="fas fa-arrow-up me-2"></i>@Model.GrowthRate.ToString("N2")% <span class="fs-5 fw-normal">Growth</span>
+                    </h2>
+                }
+                else
+                {
+                    <h2 class="text-danger fw-bold mb-0">
+                        <i class="fas fa-arrow-down me-2"></i>@Model.GrowthRate.ToString("N2")% <span class="fs-5 fw-normal">Decline</span>
+                    </h2>
+                }
+            </div>
+            <div class="text-end text-muted small">
+                Compared to previous month<br>performance metrics
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h6 class="fw-bold text-success mb-0">Top 5 Revenue Drivers</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr class="small text-muted text-uppercase">
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th class="text-end">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TopProducts)
+                            {
+                                <tr>
+                                    <td><span class="fw-semibold">@item.ProductName</span></td>
+                                    <td>@item.QuantitySold</td>
+                                    <td class="text-end fw-bold text-dark">₱ @item.Revenue.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h6 class="fw-bold text-danger mb-0">Low Performing Products</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr class="small text-muted text-uppercase">
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th class="text-end">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.LowProducts)
+                            {
+                                <tr>
+                                    <td><span class="fw-semibold">@item.ProductName</span></td>
+                                    <td>@item.QuantitySold</td>
+                                    <td class="text-end fw-bold text-dark">₱ @item.Revenue.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-3">
+            <h6 class="fw-bold text-dark mb-0">Monthly Revenue Trend</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless align-middle mb-0">
+                <thead class="bg-light">
+                    <tr class="small text-muted text-uppercase">
+                        <th class="ps-3">Month</th>
+                        <th class="text-end pe-3">Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var month in Model.MonthlyRevenue)
+                    {
+                        <tr class="border-bottom">
+                            <td class="ps-3">@month.Month</td>
+                            <td class="text-end pe-3 fw-bold">₱ @month.Revenue.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* <div class="card border-0 shadow-sm rounded-3 border-start border-primary border-5">
+        <div class="card-body">
+            <h6 class="fw-bold text-primary text-uppercase small mb-2">Strategic Insight</h6>
+            <p class="text-secondary mb-0 small lh-base">
+                This report provides executive-level visibility into revenue growth, product contribution,
+                and overall sales performance. Management can use this data to identify high-performing
+                products for expansion, underperforming items for review or archival, and overall market
+                direction to adjust pricing and marketing strategy.
+            </p>
+        </div>
+    </div> *@
+</div>
+
+<style>
+    .card {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .table thead th {
+        font-size: 0.7rem;
+        border: none;
+    }
+
+    .table tbody td {
+        border-color: #f8f9fa;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .container-fluid {
+        max-width: 1400px;
+    }
+</style>
